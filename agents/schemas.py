@@ -55,3 +55,24 @@ class ATSGateResult(BaseModel):
     required_years: int | None
     candidate_years: float
     years_requirement_met: bool
+
+
+class SemanticFitResult(BaseModel):
+    """Output of the semantic_fit_scoring node."""
+
+    fit_tier: Literal["strong", "moderate", "weak"]
+    matched_skills: list[str]
+    missing_skills: list[str]
+    reasoning: str
+
+
+class SkillGap(BaseModel):
+    skill: str
+    classification: Literal["fixable", "real_gap", "borderline"]
+    reasoning: str
+
+
+class GapAnalysisResult(BaseModel):
+    """Output of the gap_analysis node."""
+
+    gaps: list[SkillGap]

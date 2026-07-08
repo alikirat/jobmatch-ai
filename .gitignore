@@ -30,6 +30,7 @@ data/db/
 
 # --- Local JSON job store (placeholder for MongoDB) ---
 agents/data/
+backend/data/
 
 # --- OS ---
 .DS_Store

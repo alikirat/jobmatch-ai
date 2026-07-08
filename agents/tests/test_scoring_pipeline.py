@@ -3,7 +3,7 @@ import json
 import pytest
 
 from agents.workflows.scoring_pipeline import run_scoring_pipeline
-from agents.store import JobStore
+from agents.store import JsonStore
 
 
 class _ScriptedLLMClient:
@@ -27,8 +27,8 @@ class _ExplodingLLMClient:
         raise AssertionError("LLM should not have been called")
 
 
-def _store(tmp_path) -> JobStore:
-    return JobStore(tmp_path / "processed_jobs.json")
+def _store(tmp_path) -> JsonStore:
+    return JsonStore(tmp_path / "processed_jobs.json")
 
 
 def test_new_job_that_passes_ats_gate_runs_the_full_pipeline(

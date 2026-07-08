@@ -19,7 +19,7 @@ from agents.nodes.score.ats_gate_check import ats_gate_check
 from agents.nodes.score.gap_analysis import gap_analysis
 from agents.nodes.score.semantic_fit_scoring import semantic_fit_scoring
 from agents.schemas import PipelineResult
-from agents.store import JobStore
+from agents.store import JsonStore
 from agents.workflows.dedup import compute_dedup_key
 
 DEFAULT_STORE_PATH = Path(__file__).parent.parent / "data" / "processed_jobs.json"
@@ -28,10 +28,10 @@ DEFAULT_STORE_PATH = Path(__file__).parent.parent / "data" / "processed_jobs.jso
 def run_scoring_pipeline(
     raw_posting: dict,
     resume: dict,
-    store: JobStore | None = None,
+    store: JsonStore | None = None,
     llm_client: LLMClient | None = None,
 ) -> dict:
-    store = store or JobStore(DEFAULT_STORE_PATH)
+    store = store or JsonStore(DEFAULT_STORE_PATH)
     dedup_key = compute_dedup_key(raw_posting)
 
     cached = store.get(dedup_key)

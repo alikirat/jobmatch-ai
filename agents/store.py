@@ -1,7 +1,8 @@
-"""Local JSON-file key/value store for processed-job results.
+"""Local JSON-file key/value store.
 
-Placeholder for MongoDB — same get/put shape, so the pipeline can swap to a Mongo-backed
-store later without changing call sites.
+Placeholder for MongoDB — same get/put shape, so callers (the scoring pipeline's job cache,
+the backend's resume store, etc.) can swap to a Mongo-backed store later without changing
+call sites.
 """
 
 from __future__ import annotations
@@ -10,16 +11,16 @@ import json
 from pathlib import Path
 
 
-class JobStore:
+class JsonStore:
     def __init__(self, path: Path) -> None:
         self._path = path
 
-    def get(self, dedup_key: str) -> dict | None:
-        return self._read_all().get(dedup_key)
+    def get(self, key: str) -> dict | None:
+        return self._read_all().get(key)
 
-    def put(self, dedup_key: str, result: dict) -> None:
+    def put(self, key: str, value: dict) -> None:
         data = self._read_all()
-        data[dedup_key] = result
+        data[key] = value
         self._write_all(data)
 
     def _read_all(self) -> dict:

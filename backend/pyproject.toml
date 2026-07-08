@@ -18,6 +18,7 @@ dependencies = [
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.24",
+    "httpx>=0.27",
     "ruff>=0.6",
     "mypy>=1.11",
 ]
@@ -28,3 +29,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["app"]
+
+[tool.pytest.ini_options]
+# Tests import the app as `app...` (this directory) and `agents...` (the sibling package),
+# so both this directory and the repo root need to be on sys.path.
+pythonpath = [".", ".."]
+testpaths = ["tests"]

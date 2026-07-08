@@ -28,6 +28,9 @@ pnpm-debug.log*
 # --- MongoDB local data ---
 data/db/
 
+# --- Local JSON job store (placeholder for MongoDB) ---
+agents/data/
+
 # --- OS ---
 .DS_Store
 Thumbs.db

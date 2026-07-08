@@ -32,6 +32,7 @@ class RawJobPosting(BaseModel):
     required_skills: list[str] = Field(default_factory=list)
     nice_to_have_skills: list[str] = Field(default_factory=list)
     description: str | None = None
+    job_id: str | None = None
 
 
 class NormalizedRequirements(BaseModel):
@@ -93,3 +94,15 @@ class ResumeOptimizationResult(BaseModel):
     """Output of the resume_optimizer node."""
 
     suggestions: list[ResumeEditSuggestion]
+
+
+class PipelineResult(BaseModel):
+    """Output of the scoring_pipeline workflow — what gets cached in the job store, keyed by dedup_key."""
+
+    dedup_key: str
+    status: Literal["ats_gate_failed", "scored"]
+    normalized_posting: NormalizedRequirements
+    ats_gate_result: ATSGateResult
+    semantic_fit_result: SemanticFitResult | None = None
+    gap_analysis_result: GapAnalysisResult | None = None
+    resume_optimization_result: ResumeOptimizationResult | None = None

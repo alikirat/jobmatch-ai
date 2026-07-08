@@ -76,3 +76,20 @@ class GapAnalysisResult(BaseModel):
     """Output of the gap_analysis node."""
 
     gaps: list[SkillGap]
+
+
+class ResumeEditSuggestion(BaseModel):
+    """A single suggested edit addressing one fixable gap. Must only rephrase or reorder
+    content already present in the resume — never introduce new facts."""
+
+    skill: str
+    edit_type: Literal["rephrase", "reorder"]
+    before: str
+    after: str
+    rationale: str
+
+
+class ResumeOptimizationResult(BaseModel):
+    """Output of the resume_optimizer node."""
+
+    suggestions: list[ResumeEditSuggestion]

@@ -1,0 +1,30 @@
+[project]
+name = "jobmatch-backend"
+version = "0.1.0"
+description = "JobMatch AI backend API (FastAPI) — serves the frontend and orchestrates the agents graph workflow"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "motor>=3.5",
+    "python-dotenv>=1.0",
+    "google-adk>=0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

@@ -1,0 +1,23 @@
+{
+  "title": "Senior Backend Engineer",
+  "company": "Acme Robotics",
+  "location": "Remote (US)",
+  "employment_type": "Full-time",
+  "work_arrangement": "Remote (US only)",
+  "years_required": "5+ years of experience",
+  "salary_range": "$150,000 - $185,000 USD",
+  "required_skills": [
+    "  Python ",
+    "FastAPI",
+    "postgresql",
+    "Docker",
+    "AWS",
+    "Kubernetes"
+  ],
+  "nice_to_have_skills": [
+    "React",
+    "TypeScript",
+    "Kafka"
+  ],
+  "description": "Acme Robotics is looking for a Senior Backend Engineer to help scale our order-processing platform. You'll own service architecture end to end and mentor mid-level engineers."
+}

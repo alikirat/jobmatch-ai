@@ -23,3 +23,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["."]
+
+[tool.pytest.ini_options]
+# Tests import the package as `agents.nodes...`; this puts the repo root
+# (the parent of this directory) on sys.path so that resolves.
+pythonpath = [".."]
+testpaths = ["tests"]

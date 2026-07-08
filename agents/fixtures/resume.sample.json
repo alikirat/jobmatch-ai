@@ -1,0 +1,37 @@
+{
+  "candidate_name": "Jordan Alvarez",
+  "years_experience": 6.5,
+  "skills": [
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "Docker",
+    "AWS",
+    "React",
+    "TypeScript",
+    "Git",
+    "REST APIs"
+  ],
+  "roles": [
+    {
+      "title": "Senior Backend Engineer",
+      "company": "Northwind Logistics",
+      "years": 3.3,
+      "highlights": [
+        "Led migration of a monolithic order-processing service to FastAPI microservices, cutting p95 latency by 40%",
+        "Owned the PostgreSQL schema and query optimization for a system handling 2M+ orders/month",
+        "Introduced a Docker-based CI/CD pipeline, reducing deployment time from 45 minutes to 6 minutes"
+      ]
+    },
+    {
+      "title": "Backend Engineer",
+      "company": "Fernwood Analytics",
+      "years": 3.2,
+      "highlights": [
+        "Built internal REST APIs consumed by 5 downstream teams",
+        "Deployed and maintained services on AWS (EC2, RDS, S3)",
+        "Collaborated with a React frontend team to design API contracts"
+      ]
+    }
+  ]
+}

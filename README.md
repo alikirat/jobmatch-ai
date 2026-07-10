@@ -35,6 +35,26 @@ MongoDB stores:
 - Resume versions
 - Application tracking state
 
+### Local MongoDB
+
+A local, authenticated MongoDB instance is defined in `docker-compose.yml`.
+
+1. Copy `.env.example` to `.env` and set `MONGO_ROOT_USERNAME` / `MONGO_ROOT_PASSWORD`
+   (and update `MONGODB_URI` to match, if you changed them).
+2. Start it with:
+
+   ```
+   docker compose up -d
+   ```
+
+   Data persists across restarts in a named Docker volume. The container only binds to
+   `127.0.0.1:27017`, so it isn't reachable from outside the host.
+3. The backend reads `MONGODB_URI` / `MONGODB_DATABASE` from the environment (via
+   `.env`) to connect.
+
+**Never commit `.env`** — only `.env.example` (with placeholder values) belongs in git.
+`.env` is already listed in `.gitignore`.
+
 ## Status
 
 Early scaffolding — no business logic implemented yet.

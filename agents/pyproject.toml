@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "google-adk>=0.1",
     "pydantic>=2.8",
+    "motor>=3.5",
 ]
 
 [project.optional-dependencies]
@@ -29,3 +30,6 @@ packages = ["."]
 # (the parent of this directory) on sys.path so that resolves.
 pythonpath = [".."]
 testpaths = ["tests"]
+markers = [
+    "integration: requires a live MongoDB instance (see `docker compose up` in the README); skipped unless MONGODB_URI is set",
+]

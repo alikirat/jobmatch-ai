@@ -21,7 +21,7 @@ class LLMClient(Protocol):
 class AdkLlmClient:
     """Default LLMClient, backed by a Google ADK LlmAgent run through a Runner."""
 
-    def __init__(self, model: str = "gemini-2.0-flash") -> None:
+    def __init__(self, model: str = "gemini-flash-latest") -> None:
         self._model = model
 
     def complete(self, *, system_prompt: str, user_prompt: str) -> str:

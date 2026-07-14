@@ -32,6 +32,9 @@ data/db/
 agents/data/
 backend/data/
 
+# --- Personal data (real resume fixture, not for version control) ---
+agents/fixtures/resume.real.json
+
 # --- OS ---
 .DS_Store
 Thumbs.db

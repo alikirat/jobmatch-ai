@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import uuid
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, model_validator
@@ -125,3 +126,37 @@ def ingest_adzuna(
     ]
 
     return {"fetched": len(results), "results": results}
+
+
+class JobsQueueResponse(BaseModel):
+    jobs: list[PipelineResult]
+
+
+class JobStatusUpdateRequest(BaseModel):
+    status: Literal["swiped_right", "swiped_left"]
+
+
+@router.get("/jobs/queue", response_model=JobsQueueResponse)
+def get_jobs_queue(job_store: JsonStore = Depends(get_job_store)) -> dict:
+    """Scored jobs still awaiting a swipe decision, oldest first."""
+    jobs = [
+        job
+        for job in job_store.list_all()
+        if job.get("status") == "scored" and job.get("review_status", "pending") == "pending"
+    ]
+    return {"jobs": jobs}
+
+
+@router.patch("/jobs/{job_id}/status", response_model=PipelineResult)
+def update_job_status(
+    job_id: str,
+    request: JobStatusUpdateRequest,
+    job_store: JsonStore = Depends(get_job_store),
+) -> dict:
+    stored = job_store.get(job_id)
+    if stored is None:
+        raise HTTPException(status_code=404, detail=f"No job found for job_id={job_id!r}")
+
+    stored["review_status"] = request.status
+    job_store.put(job_id, stored)
+    return stored

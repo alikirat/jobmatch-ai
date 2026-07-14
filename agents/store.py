@@ -26,6 +26,9 @@ class JsonStore:
         data[key] = value
         self._write_all(data)
 
+    def list_all(self) -> list[dict]:
+        return list(self._read_all().values())
+
     def _read_all(self) -> dict:
         if not self._path.exists():
             return {}
@@ -60,6 +63,9 @@ class MongoStore:
     def put(self, key: str, value: dict) -> None:
         self._loop.run_until_complete(self._put(key, value))
 
+    def list_all(self) -> list[dict]:
+        return self._loop.run_until_complete(self._list_all())
+
     def close(self) -> None:
         if self._client is not None:
             self._client.close()
@@ -85,3 +91,13 @@ class MongoStore:
     async def _put(self, key: str, value: dict) -> None:
         collection = await self._get_collection()
         await collection.replace_one({"_id": key}, {"_id": key, **value}, upsert=True)
+
+    async def _list_all(self) -> list[dict]:
+        collection = await self._get_collection()
+        documents = await collection.find({}).to_list(length=None)
+        results = []
+        for document in documents:
+            document = dict(document)
+            document.pop("_id", None)
+            results.append(document)
+        return results

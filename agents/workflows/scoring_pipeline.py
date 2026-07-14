@@ -18,7 +18,7 @@ from agents.nodes.optimize.resume_optimizer import resume_optimizer
 from agents.nodes.score.ats_gate_check import ats_gate_check
 from agents.nodes.score.gap_analysis import gap_analysis
 from agents.nodes.score.semantic_fit_scoring import semantic_fit_scoring
-from agents.schemas import PipelineResult
+from agents.schemas import PipelineResult, RawJobPosting
 from agents.store import JsonStore
 from agents.workflows.dedup import compute_dedup_key
 
@@ -38,6 +38,7 @@ def run_scoring_pipeline(
     if cached is not None:
         return cached
 
+    company = RawJobPosting.model_validate(raw_posting).company
     normalized_posting = normalize_posting(raw_posting)
     ats_result = ats_gate_check(resume, normalized_posting)
 
@@ -45,6 +46,7 @@ def run_scoring_pipeline(
         result = PipelineResult(
             dedup_key=dedup_key,
             status="ats_gate_failed",
+            company=company,
             normalized_posting=normalized_posting,
             ats_gate_result=ats_result,
         ).model_dump()
@@ -64,6 +66,7 @@ def run_scoring_pipeline(
     result = PipelineResult(
         dedup_key=dedup_key,
         status="scored",
+        company=company,
         normalized_posting=normalized_posting,
         ats_gate_result=ats_result,
         semantic_fit_result=semantic_fit_result,

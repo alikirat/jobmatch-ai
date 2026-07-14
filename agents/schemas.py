@@ -101,8 +101,10 @@ class PipelineResult(BaseModel):
 
     dedup_key: str
     status: Literal["ats_gate_failed", "scored"]
+    company: str
     normalized_posting: NormalizedRequirements
     ats_gate_result: ATSGateResult
     semantic_fit_result: SemanticFitResult | None = None
     gap_analysis_result: GapAnalysisResult | None = None
     resume_optimization_result: ResumeOptimizationResult | None = None
+    review_status: Literal["pending", "swiped_right", "swiped_left"] = "pending"

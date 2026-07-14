@@ -19,6 +19,14 @@ import pytest
 from agents.store import MongoStore
 
 
+class _FakeCursor:
+    def __init__(self, documents: list[dict]) -> None:
+        self._documents = documents
+
+    async def to_list(self, length: int | None = None) -> list[dict]:
+        return list(self._documents)
+
+
 class _FakeCollection:
     def __init__(self) -> None:
         self._docs: dict[str, dict] = {}
@@ -31,6 +39,9 @@ class _FakeCollection:
 
     async def _replace_one(self, query: dict, replacement: dict, upsert: bool = False) -> None:
         self._docs[query["_id"]] = dict(replacement)
+
+    def find(self, query: dict) -> _FakeCursor:
+        return _FakeCursor(list(self._docs.values()))
 
 
 class _FakeDatabase:
@@ -82,6 +93,22 @@ def test_put_overwrites_an_existing_value(mongo_store):
 def test_get_does_not_leak_the_mongo_id_field(mongo_store):
     mongo_store.put("job-1", {"status": "scored"})
     assert "_id" not in mongo_store.get("job-1")
+
+
+def test_list_all_returns_every_stored_value(mongo_store):
+    mongo_store.put("job-1", {"status": "scored"})
+    mongo_store.put("job-2", {"status": "ats_gate_failed"})
+
+    assert sorted(mongo_store.list_all(), key=lambda doc: doc["status"]) == [
+        {"status": "ats_gate_failed"},
+        {"status": "scored"},
+    ]
+
+
+def test_list_all_does_not_leak_the_mongo_id_field(mongo_store):
+    mongo_store.put("job-1", {"status": "scored"})
+
+    assert all("_id" not in document for document in mongo_store.list_all())
 
 
 def test_close_closes_the_underlying_client(mongo_store):

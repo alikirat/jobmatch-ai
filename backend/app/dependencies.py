@@ -11,7 +11,9 @@ import os
 from collections.abc import Iterator
 
 from dotenv import load_dotenv
+from fastapi import HTTPException
 
+from agents.ingest.adzuna_client import AdzunaClient, AdzunaError
 from agents.llm.client import LLMClient
 from agents.store import MongoStore
 
@@ -39,3 +41,10 @@ def get_resume_store() -> Iterator[MongoStore]:
 
 def get_llm_client() -> LLMClient | None:
     return None
+
+
+def get_adzuna_client() -> AdzunaClient:
+    try:
+        return AdzunaClient()
+    except AdzunaError as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc

@@ -87,6 +87,90 @@ AI_AUTOMATION_ENGINEER_POSTING = {
     "job_id": "northstar-aiauto-007",
 }
 
+FENWICK_AI_AGENT_ENGINEER_POSTING = {
+    "title": "AI Agent Engineer",
+    "company": "Fenwick Robotics",
+    "location": "Remote (US/EU)",
+    "employment_type": "Full-time",
+    "work_arrangement": "Remote",
+    "years_required": "2+ years of experience",
+    "salary_range": "$110,000 - $145,000 USD",
+    "required_skills": ["Python", "Multi-agent systems", "REST APIs", "Docker", "Git", "FastAPI"],
+    "nice_to_have_skills": ["Kubernetes", "LangChain", "AWS", "TypeScript"],
+    "description": (
+        "Fenwick Robotics is building an AI-native operations platform. We're looking for an AI "
+        "Agent Engineer to design and ship multi-agent LLM workflows that automate internal ops "
+        "tasks, expose them as production REST APIs, and run reliably in containerized "
+        "environments. You'll own the agent orchestration layer end to end, from prompt design "
+        "to deployment."
+    ),
+    "job_id": "fenwick-aiagent-002",
+}
+
+IRONCLAD_PLATFORM_ENGINEER_POSTING = {
+    "title": "Senior Platform Engineer",
+    "company": "Ironclad Systems",
+    "location": "Austin, TX",
+    "employment_type": "Full-time",
+    "work_arrangement": "Hybrid (3 days onsite)",
+    "years_required": "5+ years of experience",
+    "salary_range": "$140,000 - $170,000 USD",
+    "required_skills": ["Python", "PostgreSQL", "AWS", "Kubernetes", "Terraform"],
+    "nice_to_have_skills": ["Go", "gRPC", "Datadog"],
+    "description": (
+        "Ironclad Systems is hiring a Senior Platform Engineer to own our cloud infrastructure "
+        "on AWS, running containerized services on Kubernetes and managing infra-as-code with "
+        "Terraform. You'll work closely with backend teams building on Python and PostgreSQL."
+    ),
+    "job_id": "ironclad-platform-009",
+}
+
+CASCADE_DB_RELIABILITY_POSTING = {
+    "title": "Database Reliability Engineer",
+    "company": "Cascade Data Systems",
+    "location": "Remote (US)",
+    "employment_type": "Full-time",
+    "work_arrangement": "Remote",
+    "years_required": "2+ years of experience",
+    "salary_range": "$105,000 - $130,000 USD",
+    "required_skills": ["MongoDB", "Docker", "Git", "REST APIs"],
+    "nice_to_have_skills": [
+        "Kubernetes",
+        "AWS",
+        "Terraform",
+        "Sharding",
+        "On-call incident response",
+    ],
+    "description": (
+        "Cascade Data Systems runs mission-critical MongoDB clusters at scale for fintech "
+        "customers. We're hiring a Database Reliability Engineer to own replica set topology, "
+        "sharding strategy, backup/disaster-recovery drills, and query performance tuning "
+        "across a 40+ node fleet. You'll be on a rotating on-call schedule responding to "
+        "production database incidents and driving postmortems."
+    ),
+    "job_id": "cascade-dbre-014",
+}
+
+HALCYON_DESIGN_SYSTEMS_POSTING = {
+    "title": "Frontend Engineer, Design Systems",
+    "company": "Halcyon Retail",
+    "location": "Remote (US)",
+    "employment_type": "Full-time",
+    "work_arrangement": "Remote",
+    "years_required": "2+ years of experience",
+    "salary_range": "$100,000 - $125,000 USD",
+    "required_skills": ["React", "TypeScript", "JavaScript", "Git", "HTML/CSS"],
+    "nice_to_have_skills": ["Storybook", "Figma", "Accessibility (WCAG)", "Jest", "Design tokens"],
+    "description": (
+        "Halcyon Retail is growing our design systems team. You'll build and maintain a shared "
+        "component library used across a dozen product teams, working closely with design in "
+        "Figma to translate design tokens into accessible, well-tested React/TypeScript "
+        "components. Strong WCAG accessibility knowledge and component testing discipline "
+        "(Jest, Storybook) are core to this role."
+    ),
+    "job_id": "halcyon-designsys-021",
+}
+
 
 def _store(tmp_path) -> JsonStore:
     return JsonStore(tmp_path / "processed_jobs.json")
@@ -289,3 +373,361 @@ def test_ai_automation_engineer_posting_surfaces_a_fixable_gap_and_optimization(
     assert len(suggestions) == 1
     assert suggestions[0]["skill"] == "langchain"
     assert len(client.calls) == 3
+
+
+def test_fenwick_ai_agent_engineer_posting_passes_gate_with_a_strong_fit(tmp_path, real_resume):
+    """LLM responses captured verbatim from a live run against gemini-flash-latest."""
+    client = _ScriptedLLMClient(
+        [
+            json.dumps(
+                {
+                    "fit_tier": "strong",
+                    "matched_skills": [
+                        "python",
+                        "multi-agent systems",
+                        "rest apis",
+                        "docker",
+                        "git",
+                        "fastapi",
+                        "typescript",
+                    ],
+                    "missing_skills": ["kubernetes", "langchain", "aws"],
+                    "reasoning": (
+                        "The candidate meets all required skills and has exactly the 2.0 years "
+                        "of experience requested, with a highly relevant background in building "
+                        "multi-agent systems and AI tools (such as Google ADK, Claude API, and "
+                        "n8n workflows). Although missing nice-to-have skills like Kubernetes, "
+                        "AWS, and LangChain, his deep practical experience with agentic "
+                        "architectures makes him a strong fit for this specific role."
+                    ),
+                }
+            ),
+            json.dumps(
+                {
+                    "gaps": [
+                        {
+                            "skill": "kubernetes",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "While the candidate lists Docker as a skill, the resume has no "
+                                "mentions of container orchestration, Kubernetes, or managing "
+                                "clustered deployments."
+                            ),
+                        },
+                        {
+                            "skill": "langchain",
+                            "classification": "fixable",
+                            "reasoning": (
+                                "The candidate has built multiple LLM-based applications and "
+                                "multi-agent systems using Google ADK, n8n, and Claude APIs, "
+                                "demonstrating strong conceptual and practical equivalence to "
+                                "LangChain."
+                            ),
+                        },
+                        {
+                            "skill": "aws",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "There is no evidence of cloud infrastructure experience, "
+                                "deployment on AWS, or any other cloud service providers in the "
+                                "candidate's history."
+                            ),
+                        },
+                    ]
+                }
+            ),
+            json.dumps(
+                {
+                    "suggestions": [
+                        {
+                            "skill": "langchain",
+                            "edit_type": "rephrase",
+                            "before": (
+                                "Built JobMatch AI, a multi-agent job search assistant using "
+                                "Google ADK 2.0, with ATS keyword gating, LLM-based semantic "
+                                "scoring, and automated resume optimization"
+                            ),
+                            "after": (
+                                "Built JobMatch AI, a multi-agent job search assistant utilizing "
+                                "Google ADK 2.0 (LangChain-equivalent agent orchestration), with "
+                                "ATS keyword gating, LLM-based semantic scoring, and automated "
+                                "resume optimization"
+                            ),
+                            "rationale": (
+                                "Surfaces the nice-to-have LangChain skill by drawing a direct, "
+                                "truthful parallel between the candidate's Google ADK 2.0 agent "
+                                "orchestration experience and LangChain."
+                            ),
+                        }
+                    ]
+                }
+            ),
+        ]
+    )
+
+    result = run_scoring_pipeline(
+        FENWICK_AI_AGENT_ENGINEER_POSTING, real_resume, store=_store(tmp_path), llm_client=client
+    )
+    _print_result(FENWICK_AI_AGENT_ENGINEER_POSTING["title"], result)
+
+    assert result["status"] == "scored"
+    assert result["ats_gate_result"]["passed"] is True
+    assert result["semantic_fit_result"]["fit_tier"] == "strong"
+    assert result["semantic_fit_result"]["missing_skills"] == ["kubernetes", "langchain", "aws"]
+
+    gaps_by_skill = {gap["skill"]: gap["classification"] for gap in result["gap_analysis_result"]["gaps"]}
+    assert gaps_by_skill == {"kubernetes": "real_gap", "langchain": "fixable", "aws": "real_gap"}
+
+    suggestions = result["resume_optimization_result"]["suggestions"]
+    assert len(suggestions) == 1
+    assert suggestions[0]["skill"] == "langchain"
+    assert len(client.calls) == 3
+
+
+def test_ironclad_platform_engineer_posting_fails_ats_gate_on_missing_infra_skills(
+    tmp_path, real_resume
+):
+    result = run_scoring_pipeline(
+        IRONCLAD_PLATFORM_ENGINEER_POSTING,
+        real_resume,
+        store=_store(tmp_path),
+        llm_client=_ExplodingLLMClient(),
+    )
+    _print_result(IRONCLAD_PLATFORM_ENGINEER_POSTING["title"], result)
+
+    assert result["status"] == "ats_gate_failed"
+    assert result["ats_gate_result"]["passed"] is False
+    assert result["ats_gate_result"]["missing_required_skills"] == [
+        "postgresql",
+        "aws",
+        "kubernetes",
+        "terraform",
+    ]
+    assert result["ats_gate_result"]["years_requirement_met"] is False
+    assert result["semantic_fit_result"] is None
+    assert result["gap_analysis_result"] is None
+    assert result["resume_optimization_result"] is None
+
+
+def test_cascade_db_reliability_posting_scores_a_weak_fit_despite_passing_the_gate(
+    tmp_path, real_resume
+):
+    """LLM responses captured verbatim from a live run against gemini-flash-latest.
+
+    Demonstrates that passing the literal ATS keyword gate doesn't guarantee a good semantic
+    fit -- all required skills match, but the role is a different domain (database ops) than
+    the resume's actual experience (full-stack/AI-agent development).
+    """
+    client = _ScriptedLLMClient(
+        [
+            json.dumps(
+                {
+                    "fit_tier": "weak",
+                    "matched_skills": ["mongodb", "docker", "git", "rest apis"],
+                    "missing_skills": [
+                        "kubernetes",
+                        "aws",
+                        "terraform",
+                        "sharding",
+                        "on-call incident response",
+                    ],
+                    "reasoning": (
+                        "While the candidate meets all the baseline required skills, their "
+                        "background is heavily focused on frontend, full-stack, and AI "
+                        "multi-agent software engineering rather than database administration "
+                        "or infrastructure. They are missing all of the specialized "
+                        "nice-to-have skills for a Database Reliability Engineer, including "
+                        "Kubernetes, AWS, Terraform, sharding, and on-call incident response "
+                        "experience, meaning their overall profile does not align with this "
+                        "operations-heavy role."
+                    ),
+                }
+            ),
+            json.dumps(
+                {
+                    "gaps": [
+                        {
+                            "skill": "kubernetes",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "The resume lists 'Docker' as a skill but contains no mention "
+                                "of container orchestration, clustering, or cloud deployment "
+                                "experience."
+                            ),
+                        },
+                        {
+                            "skill": "aws",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "There is no mention of AWS or any other major public cloud "
+                                "provider in the candidate's experience or skills list."
+                            ),
+                        },
+                        {
+                            "skill": "terraform",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "The resume shows no evidence of experience with Infrastructure "
+                                "as Code (IaC) or automated provisioning tools."
+                            ),
+                        },
+                        {
+                            "skill": "sharding",
+                            "classification": "borderline",
+                            "reasoning": (
+                                "The candidate has experience with 'MongoDB' through their "
+                                "Atlas Taxi project, which is a database technology that "
+                                "natively uses sharding, but they do not explicitly mention "
+                                "configuring database scaling, clustering, or partitioning."
+                            ),
+                        },
+                        {
+                            "skill": "on-call incident response",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "The candidate's background is in freelance development, "
+                                "teaching, and business consulting, with no experience in "
+                                "production systems administration or on-call rotation support."
+                            ),
+                        },
+                    ]
+                }
+            ),
+        ]
+    )
+
+    result = run_scoring_pipeline(
+        CASCADE_DB_RELIABILITY_POSTING, real_resume, store=_store(tmp_path), llm_client=client
+    )
+    _print_result(CASCADE_DB_RELIABILITY_POSTING["title"], result)
+
+    assert result["status"] == "scored"
+    assert result["ats_gate_result"]["passed"] is True
+    assert result["semantic_fit_result"]["fit_tier"] == "weak"
+    assert result["semantic_fit_result"]["missing_skills"] == [
+        "kubernetes",
+        "aws",
+        "terraform",
+        "sharding",
+        "on-call incident response",
+    ]
+
+    gaps_by_skill = {gap["skill"]: gap["classification"] for gap in result["gap_analysis_result"]["gaps"]}
+    assert gaps_by_skill == {
+        "kubernetes": "real_gap",
+        "aws": "real_gap",
+        "terraform": "real_gap",
+        "sharding": "borderline",
+        "on-call incident response": "real_gap",
+    }
+
+    assert result["resume_optimization_result"]["suggestions"] == []
+    assert len(client.calls) == 2
+
+
+def test_halcyon_design_systems_posting_scores_a_moderate_fit(tmp_path, real_resume):
+    """LLM responses captured verbatim from a live run against gemini-flash-latest."""
+    client = _ScriptedLLMClient(
+        [
+            json.dumps(
+                {
+                    "fit_tier": "moderate",
+                    "matched_skills": ["React", "TypeScript", "JavaScript", "Git", "HTML/CSS"],
+                    "missing_skills": [
+                        "storybook",
+                        "figma",
+                        "accessibility (wcag)",
+                        "jest",
+                        "design tokens",
+                    ],
+                    "reasoning": (
+                        "The candidate meets all required core technical skills (React, "
+                        "TypeScript, JavaScript, Git, and HTML/CSS) and satisfies the minimum "
+                        "experience requirement. However, their experience is heavily focused "
+                        "on general full-stack and AI-agent development, leaving a significant "
+                        "gap in design-system-specific competencies such as Storybook, Figma, "
+                        "and design tokens."
+                    ),
+                }
+            ),
+            json.dumps(
+                {
+                    "gaps": [
+                        {
+                            "skill": "storybook",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "The resume lists React and HTML/CSS but contains no mention of "
+                                "Storybook, component isolation, UI library development, or any "
+                                "adjacent frontend documentation tools."
+                            ),
+                        },
+                        {
+                            "skill": "figma",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "There is no mention of Figma, prototyping, UI/UX design "
+                                "collaboration, or any visual design tools in the candidate's "
+                                "profile."
+                            ),
+                        },
+                        {
+                            "skill": "accessibility (wcag)",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "The resume has no reference to web accessibility, WCAG "
+                                "standards, semantic HTML optimization, or assistive technology "
+                                "compatibility."
+                            ),
+                        },
+                        {
+                            "skill": "jest",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "No unit testing frameworks, integration testing, or JavaScript "
+                                "testing tools (like Jest or Mocha) are mentioned in the "
+                                "candidate's projects or skills."
+                            ),
+                        },
+                        {
+                            "skill": "design tokens",
+                            "classification": "real_gap",
+                            "reasoning": (
+                                "The candidate has built standard web applications but shows no "
+                                "evidence of working with design systems, design tokens, "
+                                "advanced CSS variables, or styling architecture."
+                            ),
+                        },
+                    ]
+                }
+            ),
+        ]
+    )
+
+    result = run_scoring_pipeline(
+        HALCYON_DESIGN_SYSTEMS_POSTING, real_resume, store=_store(tmp_path), llm_client=client
+    )
+    _print_result(HALCYON_DESIGN_SYSTEMS_POSTING["title"], result)
+
+    assert result["status"] == "scored"
+    assert result["ats_gate_result"]["passed"] is True
+    assert result["semantic_fit_result"]["fit_tier"] == "moderate"
+    assert result["semantic_fit_result"]["missing_skills"] == [
+        "storybook",
+        "figma",
+        "accessibility (wcag)",
+        "jest",
+        "design tokens",
+    ]
+
+    gaps_by_skill = {gap["skill"]: gap["classification"] for gap in result["gap_analysis_result"]["gaps"]}
+    assert gaps_by_skill == {
+        "storybook": "real_gap",
+        "figma": "real_gap",
+        "accessibility (wcag)": "real_gap",
+        "jest": "real_gap",
+        "design tokens": "real_gap",
+    }
+
+    assert result["resume_optimization_result"]["suggestions"] == []
+    assert len(client.calls) == 2

@@ -55,6 +55,55 @@ A local, authenticated MongoDB instance is defined in `docker-compose.yml`.
 **Never commit `.env`** — only `.env.example` (with placeholder values) belongs in git.
 `.env` is already listed in `.gitignore`.
 
+## Running locally
+
+Prerequisites: Python 3.11+, [uv](https://github.com/astral-sh/uv), Node.js, Docker.
+
+1. **MongoDB** — see [Local MongoDB](#local-mongodb) above; leave it running.
+2. **Backend** (from the repo root):
+
+   ```
+   uv venv .venv
+   source .venv/bin/activate
+   uv pip install -e "./backend[dev]" -e "./agents[dev]"
+
+   cd backend
+   PYTHONPATH=..:. uvicorn app.main:app --reload --port 8000
+   ```
+
+   `agents` and `backend` are sibling packages, so `PYTHONPATH` needs both the repo
+   root (for `agents`) and `backend/` (for `app`). Port **8000** matters — it's what
+   the frontend's Vite dev proxy expects.
+
+   Scoring calls a real Gemini model by default (`get_llm_client()` in
+   `backend/app/dependencies.py` returns `None`, so nodes fall back to
+   `AdkLlmClient`), so `GOOGLE_API_KEY` must be set in `.env`. Gemini occasionally
+   returns a transient `503 UNAVAILABLE` under load — just retry the request.
+
+3. **Frontend** (from `frontend/`):
+
+   ```
+   npm install
+   npm run dev
+   ```
+
+   Opens on `http://localhost:5173` and proxies `/jobs`, `/score`, `/resumes`,
+   `/ingest` to the backend on port 8000 (see `frontend/vite.config.ts`).
+
+4. **Get some scored jobs into the queue** — the swipe UI only shows postings with
+   `status: "scored"`. Either run `POST /ingest/adzuna` (needs `ADZUNA_APP_ID` /
+   `ADZUNA_APP_KEY`), or `POST /score` directly with a resume and a job posting body
+   (see `agents/fixtures/` for example shapes).
+
+Running the test suites doesn't need any of the above except the Python venv —
+`agents/tests` and `backend/tests` inject scripted/stub LLM clients and a
+`JsonStore`, so they don't touch MongoDB or make real API calls:
+
+```
+cd agents && python -m pytest -q
+cd backend && PYTHONPATH=..:. python -m pytest -q
+```
+
 ## Status
 
 Early scaffolding — no business logic implemented yet.

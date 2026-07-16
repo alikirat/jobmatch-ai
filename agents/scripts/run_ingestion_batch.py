@@ -231,10 +231,14 @@ def main() -> None:
             new_count += 1
 
         try:
+            # llm_client=None lets each node fall back to AdkLlmClient, which already
+            # retries transient Gemini errors (503s, rate limits) with backoff internally
+            # -- an exception surfacing here means those retries were already exhausted,
+            # not just that a single attempt failed.
             result = run_scoring_pipeline(raw_posting, resume, store=store, llm_client=None)
         except Exception as exc:  # noqa: BLE001 -- one bad posting shouldn't kill the batch
             error_count += 1
-            print(f"  ! Failed to score {dedup_key!r}: {exc}", file=sys.stderr)
+            print(f"  ! Failed to score {dedup_key!r} after retries were exhausted: {exc}", file=sys.stderr)
             continue
 
         if result["status"] == "ats_gate_failed":

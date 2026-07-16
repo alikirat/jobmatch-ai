@@ -52,6 +52,7 @@ function App() {
       {jobs !== null && jobs.length > 0 && (
         <>
           <JobCard
+            key={jobs[0].dedup_key}
             job={jobs[0]}
             onSwipeLeft={() => handleSwipe("swiped_left")}
             onSwipeRight={() => handleSwipe("swiped_right")}

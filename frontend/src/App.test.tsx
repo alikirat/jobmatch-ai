@@ -17,6 +17,7 @@ function makeJob(overrides: Partial<ScoredJob>): ScoredJob {
       salary_max: null,
       salary_currency: null,
       work_arrangement: "remote",
+      description: "A backend engineering role.",
     },
     semantic_fit_result: {
       fit_tier: "strong",

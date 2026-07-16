@@ -72,5 +72,6 @@ def normalize_posting(raw_posting: dict) -> dict:
         salary_max=salary_max,
         salary_currency=salary_currency,
         work_arrangement=_classify_work_arrangement(posting.work_arrangement),
+        description=posting.description,
     )
     return normalized.model_dump()

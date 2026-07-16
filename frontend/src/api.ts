@@ -1,4 +1,4 @@
-import type { ReviewStatus, ScoredJob } from "./types";
+import type { JobDetail, ReviewStatus, ScoredJob } from "./types";
 
 export async function fetchJobsQueue(): Promise<ScoredJob[]> {
   const response = await fetch("/jobs/queue");
@@ -7,6 +7,14 @@ export async function fetchJobsQueue(): Promise<ScoredJob[]> {
   }
   const data = (await response.json()) as { jobs: ScoredJob[] };
   return data.jobs;
+}
+
+export async function fetchJobDetail(jobId: string): Promise<JobDetail> {
+  const response = await fetch(`/jobs/${jobId}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch job detail (HTTP ${response.status})`);
+  }
+  return (await response.json()) as JobDetail;
 }
 
 export async function updateJobStatus(

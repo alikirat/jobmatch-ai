@@ -147,6 +147,18 @@ def get_jobs_queue(job_store: JsonStore = Depends(get_job_store)) -> dict:
     return {"jobs": jobs}
 
 
+@router.get("/jobs/{job_id}", response_model=PipelineResult)
+def get_job_detail(job_id: str, job_store: JsonStore = Depends(get_job_store)) -> dict:
+    """Full pipeline result for a single job -- the expanded detail view, unlike the
+    summary-oriented /jobs/queue, needs the full description, gap analysis, and resume
+    optimization suggestions.
+    """
+    stored = job_store.get(job_id)
+    if stored is None:
+        raise HTTPException(status_code=404, detail=f"No job found for job_id={job_id!r}")
+    return stored
+
+
 @router.patch("/jobs/{job_id}/status", response_model=PipelineResult)
 def update_job_status(
     job_id: str,

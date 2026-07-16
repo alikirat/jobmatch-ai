@@ -46,6 +46,9 @@ class NormalizedRequirements(BaseModel):
     salary_max: int | None
     salary_currency: str | None
     work_arrangement: Literal["remote", "hybrid", "onsite", "unknown"]
+    # Passed through as-is from RawJobPosting -- not otherwise "normalized" -- so the full
+    # posting text survives into the stored PipelineResult for the job detail view.
+    description: str | None = None
 
 
 class ATSGateResult(BaseModel):

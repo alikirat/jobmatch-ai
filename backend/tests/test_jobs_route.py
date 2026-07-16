@@ -74,6 +74,40 @@ def test_jobs_queue_excludes_jobs_already_swiped(client, sample_resume, sample_j
     assert queue_response.json() == {"jobs": []}
 
 
+def test_get_job_detail_returns_the_full_pipeline_result(client, sample_resume, sample_job_posting):
+    resume_with_kubernetes = {**sample_resume, "skills": [*sample_resume["skills"], "Kubernetes"]}
+    app.dependency_overrides[get_llm_client] = lambda: ScriptedLLMClient(
+        [
+            json.dumps(
+                {
+                    "fit_tier": "strong",
+                    "matched_skills": ["python", "kubernetes"],
+                    "missing_skills": [],
+                    "reasoning": "Meets all required skills.",
+                }
+            ),
+        ]
+    )
+    scored = _score(client, sample_job_posting, resume_with_kubernetes)
+
+    response = client.get(f"/jobs/{scored['dedup_key']}")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["dedup_key"] == scored["dedup_key"]
+    assert body["status"] == "scored"
+    assert body["company"] == sample_job_posting["company"]
+    assert body["normalized_posting"]["description"] == sample_job_posting["description"]
+    assert body["gap_analysis_result"] == {"gaps": []}
+    assert body["resume_optimization_result"] == {"suggestions": []}
+
+
+def test_get_job_detail_with_unknown_job_id_returns_404(client):
+    response = client.get("/jobs/does-not-exist")
+
+    assert response.status_code == 404
+
+
 def test_update_job_status_persists_across_requests(client, sample_resume, sample_job_posting):
     resume_with_kubernetes = {**sample_resume, "skills": [*sample_resume["skills"], "Kubernetes"]}
     app.dependency_overrides[get_llm_client] = lambda: ScriptedLLMClient(

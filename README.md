@@ -2,6 +2,8 @@
 
 An AI-powered job search assistant that ingests job postings, scores them against your resume, analyzes gaps, and helps optimize your resume content — surfaced through a swipeable review interface.
 
+![JobMatch AI screenshot](docs/screenshot.png)
+
 ## Monorepo layout
 
 ```

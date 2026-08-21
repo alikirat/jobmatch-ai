@@ -95,7 +95,9 @@ Prerequisites: Python 3.11+, [uv](https://github.com/astral-sh/uv), Node.js, Doc
 4. **Get some scored jobs into the queue**: the swipe UI only shows postings with
    `status: "scored"`. Either run `POST /ingest/adzuna` (needs `ADZUNA_APP_ID` /
    `ADZUNA_APP_KEY`), or `POST /score` directly with a resume and a job posting body
-   (see `agents/fixtures/` for example shapes).
+   (see `agents/fixtures/` for example shapes). A Remotive job source also exists
+   (`agents/ingest/remotive_client.py`), reachable via
+   `agents/scripts/run_ingestion_batch.py` rather than its own API route.
 
 Running the test suites doesn't need any of the above except the Python venv.
 `agents/tests` and `backend/tests` inject scripted/stub LLM clients and a
@@ -108,4 +110,8 @@ cd backend && PYTHONPATH=..:. python -m pytest -q
 
 ## Status
 
-Early scaffolding. No business logic implemented yet.
+Functional end to end: ingest, score, gap analysis, and optimize all work, backed by
+MongoDB persistence, a working FastAPI backend, and a React frontend for reviewing
+scored jobs (including an expandable detail view with gap analysis and resume
+suggestions). Covered by 16 test files across the `agents` and `backend` packages.
+No live deployment yet, everything runs locally per the instructions above.

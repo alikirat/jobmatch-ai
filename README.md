@@ -1,6 +1,6 @@
 # JobMatch AI
 
-An AI-powered job search assistant that ingests job postings, scores them against your resume, analyzes gaps, and helps optimize your resume content — surfaced through a swipeable review interface.
+An AI-powered job search assistant that ingests job postings, scores them against your resume, analyzes gaps, and helps optimize your resume content, surfaced through a swipeable review interface.
 
 ![JobMatch AI screenshot](docs/screenshot.png)
 
@@ -8,7 +8,7 @@ An AI-powered job search assistant that ingests job postings, scores them agains
 
 ```
 jobmatch-ai/
-├── backend/    Python API layer (FastAPI) — serves the frontend and orchestrates the agent graph
+├── backend/    Python API layer (FastAPI), serves the frontend and orchestrates the agent graph
 ├── agents/     Python ADK 2.0 graph workflow: ingest → score → gap analysis → optimize
 └── frontend/   React app with a swipe-card interface for reviewing matched jobs
 ```
@@ -21,10 +21,10 @@ HTTP API built on FastAPI. Talks to MongoDB for persistence and invokes the work
 
 Google Agent Development Kit (ADK 2.0) graph workflow. Each stage is a node in the graph:
 
-1. **Ingest** — pull in raw job postings
-2. **Score** — score fit against a resume
-3. **Gap analysis** — identify missing skills/experience
-4. **Optimize** — propose resume content changes
+1. **Ingest**: pull in raw job postings
+2. **Score**: score fit against a resume
+3. **Gap analysis**: identify missing skills/experience
+4. **Optimize**: propose resume content changes
 
 ### frontend/
 
@@ -54,14 +54,14 @@ A local, authenticated MongoDB instance is defined in `docker-compose.yml`.
 3. The backend reads `MONGODB_URI` / `MONGODB_DATABASE` from the environment (via
    `.env`) to connect.
 
-**Never commit `.env`** — only `.env.example` (with placeholder values) belongs in git.
+**Never commit `.env`**. Only `.env.example` (with placeholder values) belongs in git.
 `.env` is already listed in `.gitignore`.
 
 ## Running locally
 
 Prerequisites: Python 3.11+, [uv](https://github.com/astral-sh/uv), Node.js, Docker.
 
-1. **MongoDB** — see [Local MongoDB](#local-mongodb) above; leave it running.
+1. **MongoDB**: see [Local MongoDB](#local-mongodb) above; leave it running.
 2. **Backend** (from the repo root):
 
    ```
@@ -74,13 +74,13 @@ Prerequisites: Python 3.11+, [uv](https://github.com/astral-sh/uv), Node.js, Doc
    ```
 
    `agents` and `backend` are sibling packages, so `PYTHONPATH` needs both the repo
-   root (for `agents`) and `backend/` (for `app`). Port **8000** matters — it's what
+   root (for `agents`) and `backend/` (for `app`). Port **8000** matters: it's what
    the frontend's Vite dev proxy expects.
 
    Scoring calls a real Gemini model by default (`get_llm_client()` in
    `backend/app/dependencies.py` returns `None`, so nodes fall back to
    `AdkLlmClient`), so `GOOGLE_API_KEY` must be set in `.env`. Gemini occasionally
-   returns a transient `503 UNAVAILABLE` under load — just retry the request.
+   returns a transient `503 UNAVAILABLE` under load. Just retry the request.
 
 3. **Frontend** (from `frontend/`):
 
@@ -92,12 +92,12 @@ Prerequisites: Python 3.11+, [uv](https://github.com/astral-sh/uv), Node.js, Doc
    Opens on `http://localhost:5173` and proxies `/jobs`, `/score`, `/resumes`,
    `/ingest` to the backend on port 8000 (see `frontend/vite.config.ts`).
 
-4. **Get some scored jobs into the queue** — the swipe UI only shows postings with
+4. **Get some scored jobs into the queue**: the swipe UI only shows postings with
    `status: "scored"`. Either run `POST /ingest/adzuna` (needs `ADZUNA_APP_ID` /
    `ADZUNA_APP_KEY`), or `POST /score` directly with a resume and a job posting body
    (see `agents/fixtures/` for example shapes).
 
-Running the test suites doesn't need any of the above except the Python venv —
+Running the test suites doesn't need any of the above except the Python venv.
 `agents/tests` and `backend/tests` inject scripted/stub LLM clients and a
 `JsonStore`, so they don't touch MongoDB or make real API calls:
 
@@ -108,4 +108,4 @@ cd backend && PYTHONPATH=..:. python -m pytest -q
 
 ## Status
 
-Early scaffolding — no business logic implemented yet.
+Early scaffolding. No business logic implemented yet.

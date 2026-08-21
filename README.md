@@ -99,7 +99,7 @@ Prerequisites: Python 3.11+, [uv](https://github.com/astral-sh/uv), Node.js, Doc
    (`agents/ingest/remotive_client.py`), reachable via
    `agents/scripts/run_ingestion_batch.py` rather than its own API route.
 
-Running the test suites doesn't need any of the above except the Python venv.
+Running the Python test suites doesn't need any of the above except the Python venv.
 `agents/tests` and `backend/tests` inject scripted/stub LLM clients and a
 `JsonStore`, so they don't touch MongoDB or make real API calls:
 
@@ -108,10 +108,17 @@ cd agents && python -m pytest -q
 cd backend && PYTHONPATH=..:. python -m pytest -q
 ```
 
+The frontend suite needs `npm install` in `frontend/` first:
+
+```
+cd frontend && npm test
+```
+
 ## Status
 
 Functional end to end: ingest, score, gap analysis, and optimize all work, backed by
 MongoDB persistence, a working FastAPI backend, and a React frontend for reviewing
 scored jobs (including an expandable detail view with gap analysis and resume
-suggestions). Covered by 16 test files across the `agents` and `backend` packages.
-No live deployment yet, everything runs locally per the instructions above.
+suggestions). Covered by 18 test files (127 passing test cases, 3 skipped) across the
+`agents`, `backend`, and `frontend` packages. No live deployment yet, everything runs
+locally per the instructions above.

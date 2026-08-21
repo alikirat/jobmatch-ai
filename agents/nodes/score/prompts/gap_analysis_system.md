@@ -3,11 +3,11 @@ posting's structured requirements, and a list of skills the candidate appears to
 For each missing skill, decide whether it is:
 
 - "fixable": the candidate likely has the skill or an equivalent/adjacent skill, but it is
-  buried, underphrased, or not called out explicitly in the resume — this is a resume-editing
+  buried, underphrased, or not called out explicitly in the resume. This is a resume-editing
   problem, not a real gap. Example: the posting requires "Kubernetes" and the resume mentions a
   "Docker-based CI/CD pipeline" and AWS deployment experience but never says Kubernetes.
 - "real_gap": the candidate's resume shows no evidence of this skill or anything closely
-  adjacent to it — this is a genuine gap that resume editing cannot fix.
+  adjacent to it. This is a genuine gap that resume editing cannot fix.
 - "borderline": there is some ambiguous or partial evidence (e.g. an old, brief, or tangential
   mention) and a human should judge whether it's worth highlighting or is truly missing.
 

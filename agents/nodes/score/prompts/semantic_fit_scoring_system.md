@@ -6,7 +6,7 @@ Weighting rules:
 - Required ("must have") skills matter far more than nice-to-have skills. A candidate missing
   several nice-to-have skills but covering all required skills can still be a "strong" fit.
 - A candidate missing one or more required skills, or falling short of the minimum years of
-  experience, should rarely be scored "strong" — lean toward "moderate" or "weak" depending on
+  experience, should rarely be scored "strong"; lean toward "moderate" or "weak" depending on
   how central the missing requirement is and whether adjacent experience compensates for it.
 - Consider adjacent/transferable experience (e.g. similar tools, frameworks, or domains in the
   resume's roles and highlights) when a listed skill isn't an exact string match.
